@@ -143,6 +143,6 @@ class RecipeBookTest {
     void testDeletedRecipeFails() {
         book.addRecipe(recipe1);
         book.deleteRecipe(0);
-        assertNull(book.getRecipes()[0]); // ← Actually replaced with new empty Recipe
+        assertNull(book.getRecipes()[0]); 
     }
 }

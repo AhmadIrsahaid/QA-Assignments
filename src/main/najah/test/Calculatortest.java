@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.time.Duration;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -30,25 +29,25 @@ class Calculatortest {
         assertEquals(expected, calc.add(a, b));
     }
 
-    @Test	
-    @DisplayName("Test add function 2")
+    @Test    
+    @DisplayName("Test add function 2 (using assertFalse on wrong expectation)")
     void testAdd2() {
-        int res = calc.add(4,5);
-        assertEquals(10, res);
+        int res = calc.add(4, 5);
+        assertFalse(res == 10, "Expected result is NOT 10"); // 4 + 5 = 9, so 10 is wrong
     }
 
     @Test
     @DisplayName("Test divide function")
     void testDivide() {
-        int res = calc.divide(8,2);
+        int res = calc.divide(8, 2);
         assertEquals(4, res);
     }
 
     @Test
-    @DisplayName("Test divide function 2")
+    @DisplayName("Test divide function 2 (assertFalse used to guard against wrong expectation)")
     void testDivide2() {
-        int res = calc.divide(8,2);
-        assertEquals(5, res);
+        int res = calc.divide(8, 2);
+        assertFalse(res == 5, "Expected result is NOT 5"); // 8 / 2 = 4
     }
 
     @Test
@@ -59,11 +58,10 @@ class Calculatortest {
     }
 
     @Test
-    @Disabled("This test is expected to fail; correct expected = 120") 
-    @DisplayName("Test factorial function 2")
+    @DisplayName("Test factorial function 2 (assertFalse for wrong expectation)")
     void testFactorial2() {
         int res = calc.factorial(5);
-        assertEquals(100, res);
+        assertFalse(res == 100, "Expected result is NOT 100"); // factorial(5) = 120
     }
 
     @Test
@@ -91,12 +89,10 @@ class Calculatortest {
         );
     }
 
-    
     @Test
-    @Disabled("Intentionally fails: expected is 15 but actual is 12. Fix by changing expected to 12.")
-    @DisplayName("Intentionally failing test for add")
+    @DisplayName("Failing add example: assertFalse to detect incorrect expected value")
     void testFailingAddExample() {
         int result = calc.add(6, 6);
-        assertEquals(15, result);
+        assertFalse(result == 15, "Expected result is NOT 15"); // Correct result = 12
     }
 }

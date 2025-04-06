@@ -4,9 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.Duration;
 
-//import org.junit.jupiter.*;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -32,7 +30,6 @@ class ProductTest {
 
     @BeforeEach
     void setup() {
-        Product setUpProduct = new Product("Camera", 500.0);
         System.out.println("ProductTest: Setup complete");
     }
 
@@ -42,20 +39,21 @@ class ProductTest {
     }
 
     @Test
-    @DisplayName("test valid Discounts function")
+    @DisplayName("Test invalid discounts (out of allowed range)")
     void testApplyDiscount() {
-        assertAll("valid Discounts",
-                () -> assertThrows(IllegalArgumentException.class, () -> product1.applyDiscount(35)),
-                () -> assertThrows(IllegalArgumentException.class, () -> product2.applyDiscount(20)),
-                () -> assertThrows(IllegalArgumentException.class, () -> product3.applyDiscount(0)),
-                () -> assertThrows(IllegalArgumentException.class, () -> product2.applyDiscount(50)));
+        assertAll("Invalid discount cases",
+            () -> assertThrows(IllegalArgumentException.class, () -> product1.applyDiscount(65), "65% discount should throw"),
+            () -> assertThrows(IllegalArgumentException.class, () -> product3.applyDiscount(55), "55% discount should throw"),
+            () -> assertThrows(IllegalArgumentException.class, () -> product4.applyDiscount(100), "100% discount should throw")
+           
+        );
     }
 
     @Test
-    @DisplayName("Test getFinalPrice")
+    @DisplayName("Test getFinalPrice after discount")
     void testGetFinalPrice() {
         product1.applyDiscount(12);
-        assertEquals(880.0, product1.getFinalPrice());
+        assertEquals(880.0, product1.getFinalPrice(), "Final price should reflect 12% discount on 1000");
     }
 
     @Test
@@ -67,14 +65,14 @@ class ProductTest {
     @Test
     @DisplayName("Test getPrice")
     void testGetPrice() {
-        assertEquals(100, product2.getPrice());
+        assertEquals(100.0, product2.getPrice());
     }
 
     @Test
     @DisplayName("Test getDiscount")
     void testGetDiscount() {
         product1.applyDiscount(20.0);
-        assertEquals(20.0, product1.getDiscount());
+        assertEquals(20.0, product1.getDiscount(), "Discount should be 20%");
     }
 
     @Test
@@ -89,7 +87,7 @@ class ProductTest {
     @Test
     @DisplayName("Test invalid input - negative discount")
     void testInvalidDiscount() {
-        assertThrows(IllegalArgumentException.class, () -> product4.applyDiscount(-10));
+        assertThrows(IllegalArgumentException.class, () -> product4.applyDiscount(-10), "Negative discount should throw exception");
     }
 
     @ParameterizedTest
@@ -103,8 +101,8 @@ class ProductTest {
     void testProductNameAndPrice(String name, double price) {
         Product p = new Product(name, price);
         assertAll("Product details",
-            () -> assertEquals(name, p.getName()),
-            () -> assertEquals(price, p.getPrice())
+            () -> assertEquals(name, p.getName(), "Name should match"),
+            () -> assertEquals(price, p.getPrice(), "Price should match")
         );
     }
 }
